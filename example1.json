@@ -1,0 +1,1 @@
+{\n  \"and\": [\n    { \">\": [ {\"var\": \"Temperature\"}, 45 ] },\n    { \"==\": [ {\"var\": \"Rain\"}, true ] },\n    { \"==\": [ {\"var\": \"Wind\"}, false ] }\n
