@@ -8,19 +8,27 @@
 
 
     <v-container v-if="!loading" >
+      <h2>Create Custom Dynamic Condition</h2>
+
       <v-row>
         <v-col cols="12" md="12">
-          please show this adgroup when...
+        please show my Adgroup when...
           <v-textarea
             v-model="userInput"
-            label="Enter some text"
+            label=""
             outlined
             rows="4"
           ></v-textarea>
-          <v-btn @click="submitText" color="primary">Submit</v-btn>
-              <json-viewer
+          <v-row>
+            <v-btn @click="submitText" color="primary">Submit</v-btn>
+            <v-btn  @click="toggleJson"><h6>{{jsonInstruction}}</h6></v-btn>
+          </v-row>
+          <v-row>
+            <br />
+          </v-row>
+              <json-viewer 
+                v-if="showJson" 
                 :value="jsonData"
-
                 copyable
                 boxed
                 sort>
@@ -58,12 +66,13 @@ import { getResult } from "~/services/conditionPrompt.js";
 export default {
   data() {
     return {
+      showJson: false,
       userInput: "",
       explanation: "",
       loading: false,
       jsonData: {},
       // initial test values
-	    TEMPERATURE : 27, 
+	    TEMPERATURE : "27", 
 	    RAIN : true,
       WINDY:false,
       CLOUDY:true,
@@ -72,6 +81,12 @@ export default {
   },
   components: { JsonViewer },
   methods: {
+    toggleJson () {
+       console.log (">>>>>>>>>");
+      console.log (this.showJson);
+      this.showJson = ! this.showJson;
+      console.log (this.showJson);
+    },
     async submitText() {
         this.loading = true;
         try {
@@ -79,23 +94,26 @@ export default {
             const ourMessage = JSON.parse(result.choices[0].message.content);
             this.jsonData = ourMessage.json_logic;
             this.explanation = ourMessage.explanation;
-
-            // initial test of data
-            const testData = {
-	            TEMPERATURE : this.TEMPERATURE,
+            this.testData = {
+              TEMPERATURE : this.TEMPERATURE,
 	            RAIN : this.RAIN,
               WINDY: this.WINDY,
               CLOUDY: this.CLOUDY,
               DAY_OF_WEEK: this.DAY_OF_WEEK
-            };
+            }
 
-            const CAN_SHOW_ADGROUP = jsonLogic.apply( this.jsonData, testData );
+            const CAN_SHOW_ADGROUP = jsonLogic.apply( this.jsonData,  this.testData );
             console.log ({ CAN_SHOW_ADGROUP });
 
         } catch (e) {
     }
     this.loading = false;
     },
+  },
+  computed: {
+    jsonInstruction(){
+      return this.showJson ? "hide json" : "view json";
+    }
   },
 };
 </script>
