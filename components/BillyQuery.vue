@@ -26,6 +26,8 @@
           <v-row>
             <br />
           </v-row>
+          <div  v-if="showJson">
+              <p>this condition executes against weather and other contextual data at runtime:</p>
               <json-viewer 
                 v-if="showJson" 
                 :value="jsonData"
@@ -33,6 +35,7 @@
                 boxed
                 sort>
             </json-viewer>
+          </div>
         </v-col>
       </v-row>
       <v-row v-if="loading">
@@ -55,6 +58,9 @@
           ></v-textarea>
         </v-col>
       </v-row>
+      <v-row>
+        <completionModal />
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -63,6 +69,7 @@
 import jsonLogic from 'json-logic-js';
 import JsonViewer from 'vue-json-viewer';
 import { getResult } from "~/services/conditionPrompt.js";
+import completionModal from '~/components/CompletionModal.vue'
 export default {
   data() {
     return {
