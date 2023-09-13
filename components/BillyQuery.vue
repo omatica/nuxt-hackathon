@@ -10,7 +10,7 @@
     <v-container v-if="!loading" >
       <v-row>
         <v-col cols="12" md="12">
-          please show images when...
+          please show this adgroup when...
           <v-textarea
             v-model="userInput"
             label="Enter some text"
@@ -52,7 +52,8 @@
 </template>
 
 <script>
-import JsonViewer from 'vue-json-viewer'
+import jsonLogic from 'json-logic-js';
+import JsonViewer from 'vue-json-viewer';
 import { getResult } from "~/services/conditionPrompt.js";
 export default {
   data() {
@@ -60,7 +61,13 @@ export default {
       userInput: "",
       explanation: "",
       loading: false,
-      jsonData: {}
+      jsonData: {},
+      // initial test values
+	    TEMPERATURE : 27, 
+	    RAIN : true,
+      WINDY:false,
+      CLOUDY:true,
+      DAY_OF_WEEK: "FRIDAY"
     };
   },
   components: { JsonViewer },
@@ -72,6 +79,18 @@ export default {
             const ourMessage = JSON.parse(result.choices[0].message.content);
             this.jsonData = ourMessage.json_logic;
             this.explanation = ourMessage.explanation;
+
+            // initial test of data
+            const testData = {
+	            TEMPERATURE : this.TEMPERATURE,
+	            RAIN : this.RAIN,
+              WINDY: this.WINDY,
+              CLOUDY: this.CLOUDY,
+              DAY_OF_WEEK: this.DAY_OF_WEEK
+            };
+
+            const CAN_SHOW_ADGROUP = jsonLogic.apply( this.jsonData, testData );
+            console.log ({ CAN_SHOW_ADGROUP });
 
         } catch (e) {
     }

@@ -45,7 +45,7 @@ export default {
 
   env: {
     MY_SECRET: "wowee",
-    GPT_ACCESS: process.env.TESTING
+    GPT_ACCESS: process.env.OPENAI_API_KEY,
   },
 
   

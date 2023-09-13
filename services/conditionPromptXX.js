@@ -10,7 +10,7 @@ considerations
             TEMPERATURE: number,      RAIN : boolean,       WINDY: boolean,   CLOUDY: boolean
             DAY_OF_WEEK: string, one of SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY 
 
-please show images when... `
+please show my adgroup if... `
     
 
 
