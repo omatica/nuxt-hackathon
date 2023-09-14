@@ -1,5 +1,5 @@
 <template>
-  <img src="/BILLIE.png" width="490px"/>
+  <img src="/header.png" width="490px"/>
 </template>
 
 <style>
