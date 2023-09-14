@@ -8,7 +8,7 @@ const instructions =
    { explanation , json_logic }
 considerations
      json_logic should be valid JSONLogic created should include a subset of the following variables   
-            TEMPERATURE: number,      RAIN : boolean,       WINDY: boolean,   CLOUDY: boolean
+            TEMPERATURE: number,      RAIN : boolean,       WINDY: boolean,   CLOUDY: boolean, SUNNY: boolean
             DAY_OF_WEEK: string, one of SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY 
     explanation should be a concise explantion how the jsonlogic will work
 

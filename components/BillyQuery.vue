@@ -22,7 +22,7 @@
           ></v-textarea>
           <v-row>
             <v-btn @click="submitText" color="primary">Ask BILLIE</v-btn>
-            <v-btn  @click="toggleJson"><h6>{{jsonInstruction}}</h6></v-btn>
+            <v-btn v-if="explanation" @click="toggleJson"><h6>{{jsonInstruction}}</h6></v-btn>
           </v-row>
           <v-row class="my-4">
             <br />
@@ -155,71 +155,58 @@ export default {
   components: { JsonViewer, completionModal },
   methods: {
     toggleJson () {
-       console.log (">>>>>>>>>");
+      console.log (">>>>>>>>>");
       console.log (this.showJson);
       this.showJson = ! this.showJson;
       console.log (this.showJson);
     },
     async submitText() {
-        this.loading = true;
+      this.loading = true;
 
-        try {
-            const result = await getResult(this.userInput) 
-            const ourMessage = JSON.parse(result.choices[0].message.content);
-            this.jsonData = ourMessage.json_logic;
-            this.explanation = ourMessage.explanation;
-
-            /*
-            this.testData = {
-              TEMPERATURE : this.values.TEMPERATURE,
-              WEATHER: this.values.WEATHER,
-              DAY_OF_WEEK: this.values.DAY_OF_WEEK
-
-              /*
-	            RAIN : this.RAIN,
-              WINDY: this.WINDY,
-              CLOUDY: this.CLOUDY,
-              DAY_OF_WEEK: this.DAY_OF_WEEK
-              /
-            }
-
-            const CAN_SHOW_ADGROUP = jsonLogic.apply( this.jsonData,  this.testData );
-            //console.log ({ CAN_SHOW_ADGROUP });
-            */
-        } catch (e) {
-    }
-    this.loading = false;
+      try {
+          const result = await getResult(this.userInput) 
+          console.log(result)
+          const ourMessage = JSON.parse(result.choices[0].message.content);
+          this.jsonData = ourMessage.json_logic;
+          this.explanation = ourMessage.explanation;
+      } catch (error) {
+        console.trace(error)
+        console.log ("couldnt submit query " + error.message);
+      }
+      this.loading = false;
     },
   },
   computed: {
-    jsonInstruction(){
+    jsonInstruction() {
       return this.showJson ? "hide json" : "view json";
     },
-    resultFromTest(){
-      /*
-          values: {
-            TEMPERATURE: 20,
-            WEATHER: ['SUNNY'],
-            DAY_OF_WEEK: ['MONDAY'],
-          }
-      */
-      const testData = {
-              TEMPERATURE : String(this.values.TEMPERATURE),
-	            //SUNNY : this.values.WEATHER.includes('SUNNY'),
-	            RAIN : this.values.WEATHER.includes('RAIN'),
-              WINDY: this.values.WEATHER.includes('WINDY'),
-              CLOUDY: this.values.WEATHER.includes('CLOUDY'),
-              DAY_OF_WEEK: this.values.DAY_OF_WEEK[0]
+    resultFromTest() {
+        try {
+            const testData = {
+                    TEMPERATURE : this.values.TEMPERATURE,
+                    SUNNY : this.values.WEATHER.includes('SUNNY'),
+                    RAINY : this.values.WEATHER.includes('RAINY'),
+                    WINDY: this.values.WEATHER.includes('WINDY'),
+                    CLOUDY: this.values.WEATHER.includes('CLOUDY'),
+                    DAY_OF_WEEK: this.values.DAY_OF_WEEK[0]
+            }
+            const result = jsonLogic.apply( this.jsonData,  testData );
+            const qualifier = result ?  ""    :  "NOT";
+        
+            return `For these test values your  Adgroup will ${qualifier} play`
+        } catch (e) {
+            console.log(e)
+            return `For these test values your  Adgroup will NOT play`
         }
-        const result = jsonLogic.apply( this.jsonData,  testData );
-        const qualifier = result ?  ""    :  "NOT";
-        return `For these test values your  Adgroup will ${qualifier} play`
-    },
+      },
     resultClass() {
-      return this.resultFromTest.includes('NOT') ? 'red--text' : 'text-green';  // :class="resultClass"
+      return this.resultFromTest.includes('NOT') ? 'red--text' : 'green--text';  // :class="resultClass"
     }
   },
 };
+/*
+when it's monday and the temperature is between 10 and 30 and the weather is sunny, or it's friday and it's cloudy and the temperature less 15
+*/
 </script>
 
 <style scoped>
