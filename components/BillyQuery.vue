@@ -1,11 +1,9 @@
 <template>
   <div>
    
-<v-progress-circular v-if="loading"
-  color="primary" indeterminate size="128" width="6"
-></v-progress-circular>
-
-
+  <v-progress-circular v-if="loading"
+    color="primary" indeterminate size="128" width="6"
+  ></v-progress-circular>
 
     <v-container v-if="!loading" >
       <h2>Let's create a custom dynamic condition</h2>
