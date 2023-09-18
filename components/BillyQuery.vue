@@ -75,6 +75,7 @@
           <br />
           <v-form fast-fail @submit.prevent>
             <v-col cols="12">
+             <v-time-picker v-model="values.TIME_PICKER" landscape="landscape"></v-time-picker>
             <v-text-field
               v-model="values.TEMPERATURE"
               label="Temperature"
@@ -147,6 +148,7 @@ export default {
         TEMPERATURE: 20,
         WEATHER: ['SUNNY'],
         DAY_OF_WEEK: ['MONDAY'],
+        TIME_PICKER: "14:30"
       }
     };
   },
@@ -178,6 +180,10 @@ export default {
     jsonInstruction() {
       return this.showJson ? "hide json" : "view json";
     },
+    testHrsSinceMidnight(){
+       const [hours, minutes] =  this.values.TIME_PICKER.split(":");
+       return  parseInt(hours) * 60 + parseInt(minutes);
+    },
     resultFromTest() {
         try {
             const testData = {
@@ -186,7 +192,8 @@ export default {
                     RAINY : this.values.WEATHER.includes('RAINY'),
                     WINDY: this.values.WEATHER.includes('WINDY'),
                     CLOUDY: this.values.WEATHER.includes('CLOUDY'),
-                    DAY_OF_WEEK: this.values.DAY_OF_WEEK[0]
+                    DAY_OF_WEEK: this.values.DAY_OF_WEEK[0],
+                    MINUTES_SINCE_MIDNIGHT: this.testHrsSinceMidnight
             }
             const result = jsonLogic.apply( this.jsonData,  testData );
             const qualifier = result ?  ""    :  "NOT";
