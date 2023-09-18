@@ -23,6 +23,7 @@ const  getResult = async (userText) => {
     // try {
         const response = await axios.post(API_ENDPOINT, {
             model: "gpt-3.5-turbo",
+            temperature: 0.2, // more deterministic
             messages: [
               {
                 "role": "system", 
@@ -36,7 +37,28 @@ const  getResult = async (userText) => {
                   role: "user",
                   content: instructions + userText
               }
-            ]
+            ],
+            function_call: {"name": "my_weather_api_input"},
+            function: {
+              "name": "my_api_input",
+              "description": "works out if ok to play an advert based on current weather and json_logic rule ",
+              "parameters": {
+                  "type": "object",
+
+                  "properties": {
+                      "explanation": {
+                          "type": "string",
+                          "description": "explanation of the json_Logic rule ",
+                      },
+                      "json_logic": {
+                          "type": "object",
+                          "description": "must be a JSONlogic rule",
+                      },
+                  },
+                  "required": ["json_logic", "explanation"],
+              },
+          },
+
         }, {
             headers: {
                 'Content-Type': 'application/json',
