@@ -26,25 +26,15 @@ const  getResult = async (userText) => {
             temperature: 0.2, // more deterministic
             messages: [
               {
-                "role": "system", 
-                "content": "You are a friendly assistant. Your answers are JSON only."
-              },
-              {
-                  "role": "assistant", 
-                  "content": "{\"message\": \"Understood. I will output my answers in JSON format.\" }" 
-              },
-              {
                   role: "user",
                   content: instructions + userText
               }
             ],
-            function_call: {"name": "my_weather_api_input"},
-            function: {
-              "name": "my_api_input",
+            functions: [{
+              "name": "my_weather_api_input",
               "description": "works out if ok to play an advert based on current weather and json_logic rule ",
               "parameters": {
                   "type": "object",
-
                   "properties": {
                       "explanation": {
                           "type": "string",
@@ -52,12 +42,13 @@ const  getResult = async (userText) => {
                       },
                       "json_logic": {
                           "type": "object",
-                          "description": "must be a JSONlogic rule",
+                          "description": "must be in JSONlogic",
                       },
                   },
-                  "required": ["json_logic", "explanation"],
+                   "required": ["json_logic", "explanation"],
               },
-          },
+
+          }],
 
         }, {
             headers: {
