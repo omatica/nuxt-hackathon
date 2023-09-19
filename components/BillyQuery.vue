@@ -67,10 +67,6 @@
         </v-row>
 
         
-        <!-- 
-          TEMPERATURE: 37,      RAIN : true,       WINDY: true,   CLOUDY: true
-          DAY_OF_WEEK: FRIDAY
-        -->
         <v-row class="flex-col mb-4">
           <br />
           <v-form fast-fail @submit.prevent>
@@ -94,7 +90,6 @@
               :items="items.DAY_OF_WEEK"
               chips
               label="Day of the week"
-              multiple
             ></v-select>
           </v-col>
           </v-form>
@@ -129,25 +124,16 @@ export default {
       explanation: "",
       loading: false,
       jsonData: {},
-      // initial test values
-      /*
-	    TEMPERATURE : "27", 
-	    RAIN : true,
-      WINDY:false,
-      CLOUDY:true,
-      DAY_OF_WEEK: "FRIDAY",
-      weather: {
-        statuses: ['SUNNY', 'WINDY', 'RAINY', 'CLOUDY']
-      },
-      */
+     // test interface items
      items: {
         WEATHER: ['SUNNY', 'WINDY', 'RAINY', 'CLOUDY'],
         DAY_OF_WEEK: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
       },
+      // initial test interface values
       values: {
         TEMPERATURE: 20,
         WEATHER: ['SUNNY'],
-        DAY_OF_WEEK: ['MONDAY'],
+        DAY_OF_WEEK: 'MONDAY',
         TIME_PICKER: "14:30"
       }
     };
@@ -155,8 +141,6 @@ export default {
   components: { JsonViewer, completionModal },
   methods: {
     toggleJson () {
-      console.log (">>>>>>>>>");
-      console.log (this.showJson);
       this.showJson = ! this.showJson;
       console.log (this.showJson);
     },
@@ -192,7 +176,7 @@ export default {
                     RAINY : this.values.WEATHER.includes('RAINY'),
                     WINDY: this.values.WEATHER.includes('WINDY'),
                     CLOUDY: this.values.WEATHER.includes('CLOUDY'),
-                    DAY_OF_WEEK: this.values.DAY_OF_WEEK[0],
+                    DAY_OF_WEEK: this.values.DAY_OF_WEEK,
                     MINUTES_SINCE_MIDNIGHT: this.testHrsSinceMidnight
             }
             const result = jsonLogic.apply( this.jsonData,  testData );
